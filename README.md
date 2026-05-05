@@ -24,16 +24,23 @@
 
 </div>
 
+## Development Workflow
+
+This repository is maintained as a customized fork.
+For details on how upstream changes are synchronized into this repository through `upstream-main` and pull-request-based review, see:
+
+- [Git Upstream Sync Workflow](./GIT_UPSTREAM_SYNC_WORKFLOW.md)
+
 ## ⚡ Overview
 
-**MiroFish** is a next-generation AI prediction engine powered by multi-agent technology. By extracting seed information from the real world (such as breaking news, policy drafts, or financial signals), it automatically constructs a high-fidelity parallel digital world. Within this space, thousands of intelligent agents with independent personalities, long-term memory, and behavioral logic freely interact and undergo social evolution. You can inject variables dynamically from a "God's-eye view" to precisely deduce future trajectories — **rehearse the future in a digital sandbox, and win decisions after countless simulations**.
+**MiroFish** is a next-generation AI prediction engine powered by multi-agent technology. By extracting seed information from the real world (such as breaking news, policy drafts, or financial signals) and injecting it into an AI society, MiroFish conducts parallel social simulations to provide forward-looking insights and prediction reports.
 
 > You only need to: Upload seed materials (data analysis reports or interesting novel stories) and describe your prediction requirements in natural language</br>
 > MiroFish will return: A detailed prediction report and a deeply interactive high-fidelity digital world
 
 ### Our Vision
 
-MiroFish is dedicated to creating a swarm intelligence mirror that maps reality. By capturing the collective emergence triggered by individual interactions, we break through the limitations of traditional prediction:
+MiroFish is dedicated to creating a swarm intelligence mirror that maps reality. By capturing the collective emergence triggered by individual interactions, we break through the limitations of traditional static modeling and provide a dynamic, low-cost way to explore the future.
 
 - **At the Macro Level**: We are a rehearsal laboratory for decision-makers, allowing policies and public relations to be tested at zero risk
 - **At the Micro Level**: We are a creative sandbox for individual users — whether deducing novel endings or exploring imaginative scenarios, everything can be fun, playful, and accessible
@@ -42,7 +49,7 @@ From serious predictions to playful simulations, we let every "what if" see its 
 
 ## 🌐 Live Demo
 
-Welcome to visit our online demo environment and experience a prediction simulation on trending public opinion events we've prepared for you: [mirofish-live-demo](https://666ghj.github.io/mirofish-demo/)
+Welcome to visit our online demo environment and experience a prediction simulation on trending public opinion events we've prepared for you: [mirofish-live-demo](https://666ghj.github.io/mirofish/)
 
 ## 📸 Screenshots
 
@@ -190,7 +197,7 @@ The MiroFish team is recruiting full-time/internship positions. If you're intere
 
 **MiroFish has received strategic support and incubation from Shanda Group!**
 
-MiroFish's simulation engine is powered by **[OASIS (Open Agent Social Interaction Simulations)](https://github.com/camel-ai/oasis)**, We sincerely thank the CAMEL-AI team for their open-source contributions!
+MiroFish's simulation engine is powered by **[OASIS (Open Agent Social Interaction Simulations)](https://github.com/camel-ai/oasis)**, We sincerely thank the CAMEL-AI team for their open-source contribution and hope more open-source communities can thrive through collaboration.
 
 ## 📈 Project Statistics
 
