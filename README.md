@@ -29,7 +29,7 @@
 This repository is maintained as a customized fork.
 For details on how upstream changes are synchronized into this repository through `upstream-main` and pull-request-based review, see:
 
-- [Git Upstream Sync Workflow](./GIT_UPSTREAM_SYNC_WORKFLOW.md)
+- [Git Upstream Sync Workflow](./docs/github/GIT_UPSTREAM_SYNC_WORKFLOW.md)
 
 ## ⚡ Overview
 
