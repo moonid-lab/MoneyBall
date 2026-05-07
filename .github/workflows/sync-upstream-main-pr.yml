@@ -1,0 +1,119 @@
+name: Sync upstream main by pull request
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-upstream-main-pr
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Configure upstream remote
+        run: |
+          if git remote get-url upstream >/dev/null 2>&1; then
+            git remote set-url upstream https://github.com/666ghj/MiroFish.git
+          else
+            git remote add upstream https://github.com/666ghj/MiroFish.git
+          fi
+
+      - name: Fetch branches
+        run: |
+          git fetch origin main
+          git fetch upstream main
+
+      - name: Resolve upstream SHA
+        id: upstream_sha
+        run: |
+          echo "sha=$(git rev-parse upstream/main)" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve origin upstream-main SHA
+        id: current_sync_sha
+        run: |
+          if git ls-remote --exit-code origin refs/heads/upstream-main >/dev/null 2>&1; then
+            echo "sha=$(git ls-remote origin refs/heads/upstream-main | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Stop if no upstream changes
+        if: steps.upstream_sha.outputs.sha == steps.current_sync_sha.outputs.sha
+        run: echo "No upstream/main changes detected."
+
+      - name: Update local upstream-main branch
+        if: steps.upstream_sha.outputs.sha != steps.current_sync_sha.outputs.sha
+        run: |
+          if git show-ref --verify --quiet refs/heads/upstream-main; then
+            git checkout upstream-main
+          else
+            git checkout -b upstream-main upstream/main
+          fi
+          git reset --hard upstream/main
+
+      - name: Push upstream-main to origin
+        if: steps.upstream_sha.outputs.sha != steps.current_sync_sha.outputs.sha
+        run: |
+          git push origin upstream-main --force-with-lease
+
+      - name: Create or reuse pull request
+        if: steps.upstream_sha.outputs.sha != steps.current_sync_sha.outputs.sha
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const head = `${owner}:upstream-main`;
+            const base = 'main';
+            const upstreamSha = '${{ steps.upstream_sha.outputs.sha }}';
+
+            const existing = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: 'open',
+              head,
+              base
+            });
+
+            if (existing.data.length > 0) {
+              core.info(`PR already exists: ${existing.data[0].html_url}`);
+              return;
+            }
+
+            const pr = await github.rest.pulls.create({
+              owner,
+              repo,
+              title: `Sync upstream/main into main (${upstreamSha.slice(0, 7)})`,
+              head: 'upstream-main',
+              base: 'main',
+              body: [
+                'This pull request updates `upstream-main` from the upstream repository and proposes merging it into `main`.',
+                '',
+                `- Upstream repository: https://github.com/666ghj/MiroFish`,
+                `- Upstream branch: \`main\``,
+                `- Upstream commit: \`${upstreamSha}\``,
+                '',
+                'Review the changes and merge this PR manually.'
+              ].join('\n')
+            });
+
+            core.info(`Created PR: ${pr.data.html_url}`);
